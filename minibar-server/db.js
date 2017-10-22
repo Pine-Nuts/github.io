@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.Primse = global.Promise;
+mongoose.Promise = global.Promise;
 const Schema = mongoose.Schema;
 mongoose.connect('mongodb://localhost/mini-bar',{
 	useMongoClient: true
