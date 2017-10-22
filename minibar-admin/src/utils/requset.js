@@ -30,5 +30,5 @@ export function post(url,data,isLoacl=true){
   if(isLoacl){
     url = server + url;
   }
-  return axios.post(url,datas)
+  return axios.post(url,data)
 }

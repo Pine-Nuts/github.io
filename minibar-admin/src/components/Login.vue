@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import { setLogined } from "./../utils/tools";
+import { postLogin } from "./../serveice/member";
+
 export default {
   data() {
     return {
@@ -44,17 +45,27 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$message({
-            message: '登陆成功',
-            type: 'success'
-          }),
-          setLogined(this.loginForm.username),
-            this.$router.push({
-              name: 'main'
+          postLogin(this.loginForm)
+            .then(res => {
+              if(res.data.status == 'y'){
+                this.$message({
+                  message: res.data.msg,
+                  type: 'success'
+                }),
+                this.$router.push({
+                  name: 'main'
+                })
+              }
+              else{
+                this.$message({
+                  message: res.data.msg,
+                  type: 'error'
+                })
+              }
             })
         } else {
           this.$message({
-            message: '提交成功',
+            message: '提交失败',
             type: 'error'
           });
         };

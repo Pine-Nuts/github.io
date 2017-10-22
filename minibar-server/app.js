@@ -33,12 +33,12 @@ const AdminUser = require('./module/module-user');
 const utils = require('./tools/utils');
 
 app.all('*', function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-	res.header("X-Powered-By",' 3.2.1')
-	res.header("Content-Type", "application/json;charset=utf-8");
-	next();
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
 });
 
 // 系统初始化，创建管理员
@@ -47,9 +47,9 @@ AdminUser.count({username: 'admin'})
 		if(c == 0){
 			let admin = new AdminUser({
 				username : 'admin',
-				password : md5('admin'),
+				password : 'admin',
 				description : '管理员',
-				isEncryption : 1
+				isEncryption : 0
 			})
 			admin.save()
 				.then(date => {
@@ -61,35 +61,49 @@ AdminUser.count({username: 'admin'})
 		}
 	})
 	// 管理后台登录
-app.post('/admin/login',(req,res) => {
-	AdminUser.findOne({$or:[
-		{username:req.body.username},
-		{phone:req.body.username}
-	]}).then(u => {
-		if(u){
-			var strPwd = md5(req.body.password);
-			if(u.password == strPwd){
-				// 登录成功写入cookie
-				res.cookie('admin_user',u.id,{path:'/'})
-				res.json({
-					status: 'y',
-					msg: '登陆成功'
-				})
-			}
-			else {
-				res.json({
-					status: 'n',
-					msg: '管理员密码错误'
-				})
-			}
+app.post('/api/v1/admin/login',(req,res) => {
+	console.log(req.body)
+	if(req.body.username == 'admin'){
+		if(req.body.username == 'admin' && req.body.password == 'admin'){
+			res.cookie('admin_user','admin',{ path: '/' });
+			res.json({ status: 'y', msg: '登陆成功' })
 		}
 		else{
-			res.json({
-				status: 'n',
-				msg: '用户不存在'
-			})
+			res.json({ status: 'n', msg: '登录失败' })
 		}
-	})
+	}
+	else{
+		res.json({ status: 'n', msg: '您不是管理员' })
+
+	// AdminUser.findOne({'$or':[
+	// 	{username:req.body.username},
+	// 	{phone:req.body.username}
+	// ]}).then(u => {
+	// 	if(u){
+	// 		var strPwd = md5(req.body.password);
+	// 		if(u.password == strPwd){
+	// 			// 登录成功写入cookie
+	// 			res.cookie('admin_user',u.id,{path:'/'})
+	// 			res.json({
+	// 				status: 'y',
+	// 				msg: '登陆成功'
+	// 			})
+	// 		}
+	// 		else {
+	// 			res.json({
+	// 				status: 'n',
+	// 				msg: '管理员密码错误'
+	// 			})
+	// 		}
+	// 	}
+	// 	else{
+	// 		res.json({
+	// 			status: 'n',
+	// 			msg: '用户不存在'
+	// 		})
+	// 	}
+	// })
+	}
 })
 // 设置管理后台的访问权限
 app.all('/api/v1/admin/*',(req,res,next) => {

@@ -35,7 +35,7 @@ const userSchema = new Schema({
 	isEncryption: {
 		type: Number,
 		default: 1
-	}
+	},
 	createTime: {
 		type: Date,
 		default: Date.now
