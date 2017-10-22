@@ -31,6 +31,11 @@ const userSchema = new Schema({
 		type: String,
 		default: 'images/user.png'
 	},
+	// 密码是否加密
+	isEncryption: {
+		type: Number,
+		default: 1
+	}
 	createTime: {
 		type: Date,
 		default: Date.now
