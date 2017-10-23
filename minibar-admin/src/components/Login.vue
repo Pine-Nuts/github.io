@@ -21,7 +21,7 @@
 
 <script>
 import { postLogin } from "./../serveice/member";
-
+import { setLogined } from "./../utils/tools";
 export default {
   data() {
     return {
@@ -47,11 +47,13 @@ export default {
         if (valid) {
           postLogin(this.loginForm)
             .then(res => {
+              console.log(res.data)
               if(res.data.status == 'y'){
                 this.$message({
                   message: res.data.msg,
                   type: 'success'
                 }),
+                setLogined(this.loginForm.username),
                 this.$router.push({
                   name: 'main'
                 })

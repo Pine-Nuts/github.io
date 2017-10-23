@@ -8,6 +8,6 @@ export function isLogined(){
   }
 }
 
-// export function setLogined(username){
-//   Cookies.set('username',username)
-// }
+export function setLogined(username){
+  Cookies.set('username',username)
+}

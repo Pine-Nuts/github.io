@@ -26,20 +26,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.all('*', function(req, res, next) {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 
+	'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild'); 
+	res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');  
+	if (req.method == 'OPTIONS') {
+		res.send(200); /让options请求快速返回/  
+	}  else {    next();  }
+
+});
+
 app.use('/', index);
 app.use('/users', users);
 
 const AdminUser = require('./module/module-user');
 const utils = require('./tools/utils');
-
-app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    res.header("X-Powered-By",' 3.2.1');
-    res.header("Content-Type", "application/json;charset=utf-8");
-    next();
-});
 
 // 系统初始化，创建管理员
 AdminUser.count({username: 'admin'})
@@ -60,12 +62,13 @@ AdminUser.count({username: 'admin'})
 				})
 		}
 	})
+
 	// 管理后台登录
 app.post('/api/v1/admin/login',(req,res) => {
 	console.log(req.body)
 	if(req.body.username == 'admin'){
 		if(req.body.username == 'admin' && req.body.password == 'admin'){
-			res.cookie('admin_user','admin',{ path: '/' });
+			// res.cookie('admin_user','admin',{ path: '/' });
 			res.json({ status: 'y', msg: '登陆成功' })
 		}
 		else{
@@ -82,8 +85,6 @@ app.post('/api/v1/admin/login',(req,res) => {
 	// 	if(u){
 	// 		var strPwd = md5(req.body.password);
 	// 		if(u.password == strPwd){
-	// 			// 登录成功写入cookie
-	// 			res.cookie('admin_user',u.id,{path:'/'})
 	// 			res.json({
 	// 				status: 'y',
 	// 				msg: '登陆成功'
@@ -106,18 +107,21 @@ app.post('/api/v1/admin/login',(req,res) => {
 	}
 })
 // 设置管理后台的访问权限
-app.all('/api/v1/admin/*',(req,res,next) => {
-	if(req.cookies.admin_user){
-		next();
-	}
-	else( //没有登录进入登录页面
-		res.json({
-			status: 'none',
-			msg: '请登录'
-		})
-	)
-})
+// app.all('/api/v1/admin/*',(req,res,next) => {
+// 	// console.log(req.cookies)
+// 	if(req.cookies.username){
+// 		next();
+// 	}
+// 	else( //没有登录进入登录页面
+// 		res.json({
+// 			status: 'none',
+// 			msg: '请登录'
+// 		})
+// 	)
+// })
+app.use('/api/v3/common',require('./routes/api/v3/common'))
 app.use('/api/v1/admin/member',require('./routes/api/v1/member'))
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
