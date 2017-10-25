@@ -28,11 +28,7 @@ const msgSchema = new Schema({
 		type: Number,
 		default: 0
 	},
-	goodNumber: {
-		type: Number,
-		default: 0
-	},
-	badNumber: {
+	replyNumber: {
 		type: Number,
 		default: 0
 	}

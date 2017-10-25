@@ -119,9 +119,9 @@ app.post('/api/v1/admin/login',(req,res) => {
 // 		})
 // 	)
 // })
-app.use('/api/v3/common',require('./routes/api/v3/common'))
-app.use('/api/v1/admin/member',require('./routes/api/v1/member'))
-
+app.use('/api/v3/common',require('./routes/api/v3/common'));
+app.use('/api/v1/admin/member',require('./routes/api/v1/member'));
+app.use('/api/v1/admin/article',require('./routes/api/v1/article'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

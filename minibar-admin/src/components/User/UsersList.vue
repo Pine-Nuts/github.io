@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-import { getData, postDel } from './../../serveice/member'
+import { getUserData, postDel } from './../../serveice/member'
 import M from 'moment'
 export default {
   data() {
@@ -119,7 +119,7 @@ export default {
         });
     },
     getDataByPage(page=1) { // 从服务端获取数据
-      getData(page).then(res=>{
+      getUserData(page).then(res=>{
         // console.log(res.data)
         this.tableData = res.data.data.list
         this.pageCount = res.data.data.pageCount

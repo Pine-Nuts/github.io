@@ -18,7 +18,7 @@ export function postLogin(data){
  * @param {any} page
  * @returns
  */
-export function getData(page){
+export function getUserData(page){
   return get('/api/v1/admin/member',{
     params: { page }
   })

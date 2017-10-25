@@ -29,7 +29,7 @@ const userSchema = new Schema({
 	},
 	userphoto: {
 		type: String,
-		default: 'images/user.png'
+		default: '/images/user.png'
 	},
 	createTime: {
 		type: Date,

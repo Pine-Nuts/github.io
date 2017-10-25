@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Member = require('./../../../module/module-user');
+const Article = require('./../../../module/module-message');
 const utils = require('./../../../tools/utils');
 
 // 用户列表显示
@@ -9,9 +9,10 @@ router.get('/',(req,res) => {
 	if(req.query.page){
 		page = req.query.page
 	}
-	var queryCount = Member.count()
-	var queryData = Member.find({})
+	var queryCount = Article.count()
+	var queryData = Article.find({})
 		.sort({_id: -1})
+		.populate('user_id')
 		.limit(global.pageSize)
 		.skip((page-1)*global.pageSize);
 	const pAll = Promise.all([queryCount,queryData])
@@ -29,13 +30,14 @@ router.get('/',(req,res) => {
 		})
 })
 
-// 单个用户详情显示
+// 查看单个帖子
 router.get('/one',(req,res) => {
 	var query={}
 	if(req.query.id){
 		query._id = req.query.id
 	}
-	Member.findById(query)
+	Article.findById(query)
+	.populate('user_id')
 	.then(data=>{
 		res.json({
 			status:'y',
@@ -45,10 +47,9 @@ router.get('/one',(req,res) => {
 	})
 })
 
-// 创建用户
+// 创建帖子
 router.post('/create',(req,res) => {
-	req.body.password = utils.md5(req.body.password)
-	var model = new Member(req.body)
+	var model = new Article(req.body)
 		model.save()
 			.then(data=>{
 				console.log(data);
@@ -67,29 +68,9 @@ router.post('/create',(req,res) => {
 			})
 })
 
-// 更新用户
-router.post('/update/:id',(req,res) => {
-	Member.findByIdAndUpdate(req.params.id,req.body)
-	.then(data=>{
-		console.log(data);
-		// res.send('保存成功')
-		res.json({
-			status:'y',
-			msg:'更新数据成功'
-		})
-	})
-	.catch(err=>{
-		console.log(err)
-		res.json({
-			status:'n',
-			msg:'更新数据失败'
-		})
-	})
-})
-
-// 删除用户
+// 删除帖子
 router.post('/del/:id',(req,res)=>{
-	Member.findByIdAndRemove(req.params.id)
+	Article.findByIdAndRemove(req.params.id)
 		.then(data=>{
 			res.json({
 				status:'y',
