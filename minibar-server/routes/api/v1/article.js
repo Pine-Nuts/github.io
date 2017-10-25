@@ -3,7 +3,7 @@ const router = express.Router();
 const Article = require('./../../../module/module-message');
 const utils = require('./../../../tools/utils');
 
-// 用户列表显示
+// 帖子列表显示
 router.get('/',(req,res) => {
 	let page = 1; // 当前页面
 	if(req.query.page){

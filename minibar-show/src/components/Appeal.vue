@@ -1,6 +1,6 @@
 <template>
   <div class="apeal">
-    <h1>我是划水</h1>
+    <h1>我是求助</h1>
   </div>
 </template>
 
