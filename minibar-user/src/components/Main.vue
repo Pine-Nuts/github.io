@@ -30,7 +30,7 @@
               <div style="padding: 14px;">
                 <span>{{userMsg.username}}</span>
                 <div class="bottom clearfix">
-                  <el-button type="text" class="button">操作按钮</el-button>
+                  <el-button type="text" class="button" @click="userHandle">操作按钮</el-button>
                 </div>
               </div>
             </el-card>
@@ -115,7 +115,7 @@ export default {
                 name: "home",
                 query: {
                     r: Math.random(),
-                  }
+                }
               });
             } else {
               this.$message({
@@ -132,6 +132,14 @@ export default {
           return false;
         }
       });
+    },
+    userHandle(){
+      this.$router.push({
+        name: "me",
+        query: {
+           id: this.id,
+        }
+      })
     },
     handleIconClick(){
       console.log(123)

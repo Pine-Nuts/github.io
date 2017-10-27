@@ -4,6 +4,7 @@ import Main from "@/components/Main";
 import Load from "@/components/Load";
 import Register from '@/components/load/Register';
 import Login from "@/components/load/Login";
+import Me from "@/components/Me";
 import Detail from '@/components/Detail';
 import Home from '@/components/main/Home';
 import Notice from '@/components/main/Notice';
@@ -63,7 +64,11 @@ const router = new Router({
       path: '/detail',
       name: 'detail',
       component: Detail
-    },
+    },{
+      path: '/me',
+      name: 'me',
+      component: Me
+    }
   ]
 })
 router.beforeEach((to,from,next)=>{
@@ -86,6 +91,12 @@ router.beforeEach((to,from,next)=>{
   }
 })
 router.afterEach((to,from)=>{
+  if(to.name == 'login'){
+    store.commit('app/changeNav','l')
+  }
+  if(to.name == 'register'){
+    store.commit('app/changeNav','r')
+  }
   if(to.name == 'home'){
     store.commit('app/changeNav','1')
   }

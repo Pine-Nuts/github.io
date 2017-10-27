@@ -53,8 +53,8 @@ export default {
       this.$router.push({ name: 'detail' });
       this.$router.push({query:{id: cb}});
     },
-    dalDate(row, column, cellValue) {
-       console.log(cellValue)
+    dalDate() {
+       console.log(this)
       return M(cellValue).format('YYYY-MM-DD HH:mm:ss')
     },
     pageChanged(page){ // 页码选择改变

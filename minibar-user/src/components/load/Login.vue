@@ -46,7 +46,6 @@ export default {
         if (valid) {
           postLogin(this.loginForm)
             .then(res => {
-              console.log(res.data)
               if(res.data.status == 'y'){
                 this.id = res.data.id
                 this.$message({
@@ -55,7 +54,7 @@ export default {
                 }),
                 setLogined(this.id),
                 this.$router.push({
-                  name: 'main'
+                  name: 'home'
                 })
               }
               else{
