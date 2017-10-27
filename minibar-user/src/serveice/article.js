@@ -11,3 +11,13 @@ export function getArtData(page){
     params: { page }
   })
 }
+
+/**
+ * 保存数据到服务器
+ * @export
+ * @param {object} data 需要提交保存的数据
+ * @returns Promise
+ */
+export function postCreate(data) {
+  return post('/api/v2/user/article/create',data)
+}

@@ -1,30 +1,17 @@
 import { post, get } from "./../utils/requset";
 
 /**
- * get获取文章列表请求
+ * get获取标签列表请求
  *
  * @export
  * @param {any} page
  * @returns
  */
-export function getArtData(page){
-  return get('/api/v1/admin/article',{
+export function getTagData(page){
+  return get('/api/v1/admin/tag',{
     params: { page }
   })
 }
-
-/**
- * 根据id获取单条记录
- * @param {string} id 查询的id
- * @returns Promise
- */
-export function getById(id) {
-  return get('/api/v1/admin/article/one',{
-    params: { id }
-  })
-}
-
-
 
 /**
  * 保存数据到服务器
@@ -33,9 +20,19 @@ export function getById(id) {
  * @returns Promise
  */
 export function postCreate(data) {
-  return post('/api/v1/admin/article/create',data)
+  return post('/api/v1/admin/tag/create',data)
 }
 
+/**
+ * 根据id获取单条记录
+ * @param {string} id 查询的id
+ * @returns Promise
+ */
+export function getById(id) {
+  return get('/api/v1/admin/tag/one',{
+    params: { id }
+  })
+}
 /**
  * 根据id修改记录
  * @param {string} id 需要修改的记录的id
@@ -43,16 +40,17 @@ export function postCreate(data) {
  * @returns Promise
  */
 export function postUpdate(id,data) {
-  return post(`/api/v1/admin/article/update/${id}`,data)
+  return post(`/api/v1/admin/tag/update/${id}`,data)
 }
 
 /**
- * post删除用户
+ * post删除标签
  *
  * @export
  * @param {any} id
  * @returns
  */
 export function postDel(id) {
-  return post(`/api/v1/admin/article/del/${id}`)
+  return post(`/api/v1/admin/tag/del/${id}`)
 }
+

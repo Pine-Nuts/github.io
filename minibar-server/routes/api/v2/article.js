@@ -30,4 +30,25 @@ router.get('/',(req,res) => {
 		})
 })
 
+// 创建帖子
+router.post('/create',(req,res) => {
+	var model = new Article(req.body)
+		model.save()
+			.then(data=>{
+				console.log(data);
+				// res.send('保存成功')
+				res.json({
+					status:'y',
+					msg:'创建数据成功'
+				})
+			})
+			.catch(err=>{
+				console.log(err)
+				res.json({
+					status:'n',
+					msg:'创建数据失败'
+				})
+			})
+})
+
 module.exports = router;

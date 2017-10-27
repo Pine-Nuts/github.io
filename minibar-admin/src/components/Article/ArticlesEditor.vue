@@ -10,6 +10,12 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="标签" prop="tag_id">
+            <el-select v-model="artForm.tag_id" placeholder="请选择">
+              <el-option v-for="item in tags" :key="item._id" :label="item.name" :value="item._id">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="标题" prop="title">
             <span v-if="isEditor">{{artForm.title}}</span>
             <el-input v-else v-model="artForm.title"></el-input>
@@ -18,24 +24,21 @@
             <span>{{artForm.readNumber}}</span>
           </el-form-item>
           <el-form-item v-if="isEditor" label="评论量" prop="replyNumber">
-            <span :formatter="dalDate">{{artForm.readNumber}}</span>
+            <span>{{artForm.replyNumber}}</span>
           </el-form-item>
           <el-form-item v-if="isEditor" prop="createTime" label="创建时间">
-            <span :formatter="dalDate">{{artForm.createTime}}</span>
+            <span>{{artForm.createTime}}</span>
           </el-form-item>
           <el-form-item v-if="isEditor" prop="updateTime" label="更新时间">
             <span>{{artForm.updateTime}}</span>
           </el-form-item>
           <el-form-item label="内容" prop="connect">
-            <div v-if="isEditor">{{artForm.connect}}</div>
+            <div v-if="isEditor" v-html="artForm.connect"></div>
             <div v-else id="editorElem" style="text-align:left"></div>
           </el-form-item>
-          <el-form-item v-if="isEditor">
-            <el-button type="primary" @click="backForm">返回</el-button>
-          </el-form-item>
-          <el-form-item v-else>
+          <el-form-item>
             <el-button type="primary" @click="submitForm('artForm')">提交</el-button>
-            <el-button @click="resetForm('artForm')">重置</el-button>
+            <el-button v-if="!isEditor" @click="resetForm('artForm')">重置</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -45,8 +48,9 @@
 <script>
 import E from "wangeditor";
 import M from 'moment';
-import { postCreate, getById } from "./../../serveice/article";
+import { postCreate, getById, postUpdate } from "./../../serveice/article";
 import { getUserData } from "./../../serveice/member";
+import { getTagData } from "./../../serveice/tag";
 export default {
   data() {
     return {
@@ -54,8 +58,10 @@ export default {
       id: "", // 当前记录的id值,默认为空表示是新增操作
       editor: {}, // 富文本编辑器
       users: [],
+      tags: [],
       artForm: {
         user_id: "",
+        tag_id: "",
         title: "",
         connect: "",
         readNumber: "",
@@ -66,6 +72,9 @@ export default {
       rules: {
         user_id: [
           { required: true, message: '请选择用户名', trigger: 'blur' }
+        ],
+        tag_id: [
+          { required: true, message: '请选择标签', trigger: 'blur' }
         ],
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' },
@@ -79,31 +88,58 @@ export default {
     };
   },
   methods: {
-    backForm() {
-      this.$router.push({
-        name: "AL"
-      });
-    },
     submitForm(formName) {
+      if(this.isEditor){
+        this.artForm.user_id = this.artForm.user_id._id;
+      }
+      else {
+        delete this.artForm.createTime;
+        delete this.artForm.updateTime;
+        delete this.artForm.readNumber;
+        delete this.artForm.replyNumber;
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
-          postCreate(this.artForm).then(res => {
-            if (res.data.status == "y") {
-              // 成功之后处理
-              this.$message({
-                message: res.data.msg,
-                type: "success"
-              });
-              this.$router.push({
-                name: "AL"
-              });
-            } else {
-              this.$message({
-                message: res.data.msg,
-                type: "error"
-              });
-            }
-          });
+          // alert('submit!');
+          if (this.isEditor) {
+            // 编辑
+            postUpdate(this.id, this.artForm).then(res => {
+              if (res.data.status == "y") {
+                // 成功之后处理
+                this.$message({
+                  message: res.data.msg,
+                  type: "success"
+                });
+                this.$router.push({
+                  name: "AL"
+                });
+              } else {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                });
+              }
+            });
+          } else {
+            // 新增
+            postCreate(this.artForm).then(res => {
+              if (res.data.status == "y") {
+                // 成功之后处理
+                this.$message({
+                  message: res.data.msg,
+                  type: "success"
+                });
+                this.$router.push({
+                  name: "AL"
+                });
+              } else {
+                this.$message({
+                  message: res.data.msg,
+                  type: "error"
+                });
+              }
+            });
+          }
         } else {
           this.$message({
             message: "操作失败",
@@ -134,6 +170,10 @@ export default {
     getUserData()
       .then(res=>{
         this.users = res.data.data.list
+      })
+    getTagData()
+      .then(res=>{
+        this.tags = res.data.data.list
       })
   },
   mounted() {

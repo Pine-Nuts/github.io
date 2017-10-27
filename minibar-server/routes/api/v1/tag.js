@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const Member = require('./../../../module/module-user');
+const Tag = require('./../../../module/module-tag');
 const utils = require('./../../../tools/utils');
 
-// 用户列表显示
+// 标签列表显示
 router.get('/',(req,res) => {
 	let page = 1; // 当前页面
 	if(req.query.page){
 		page = req.query.page
 	}
-	var queryCount = Member.count()
-	var queryData = Member.find({})
+	var queryCount = Tag.count()
+	var queryData = Tag.find({})
 		.sort({_id: -1})
 		.limit(global.pageSize)
 		.skip((page-1)*global.pageSize);
@@ -29,13 +29,13 @@ router.get('/',(req,res) => {
 		})
 })
 
-// 单个用户详情显示
+// 单个标签详情显示
 router.get('/one',(req,res) => {
 	var query={}
 	if(req.query.id){
 		query._id = req.query.id
 	}
-	Member.findById(query)
+	Tag.findById(query)
 	.then(data=>{
 		res.json({
 			status:'y',
@@ -45,11 +45,10 @@ router.get('/one',(req,res) => {
 	})
 })
 
-// 创建用户
+// 创建标签
 router.post('/create',(req,res) => {
-	req.body.updateTime = new Date()
-	req.body.password = utils.md5(req.body.password)
-	new Member(req.body).save()
+	var model = new Tag(req.body)
+		model.save()
 			.then(data=>{
 				console.log(data);
 				// res.send('保存成功')
@@ -67,9 +66,10 @@ router.post('/create',(req,res) => {
 			})
 })
 
-// 更新用户
+// 更新标签
 router.post('/update/:id',(req,res) => {
-	Member.findByIdAndUpdate(req.params.id,req.body)
+	req.body.updateTime = new Date()
+	Tag.findByIdAndUpdate(req.params.id,req.body)
 	.then(data=>{
 		console.log(data);
 		// res.send('保存成功')
@@ -87,9 +87,9 @@ router.post('/update/:id',(req,res) => {
 	})
 })
 
-// 删除用户
+// 删除标签
 router.post('/del/:id',(req,res)=>{
-	Member.findByIdAndRemove(req.params.id)
+	Tag.findByIdAndRemove(req.params.id)
 		.then(data=>{
 			res.json({
 				status:'y',

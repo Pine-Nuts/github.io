@@ -29,6 +29,13 @@
                 <el-menu-item :route="{name:'RE'}" index="3-2">回复编辑</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
+            <el-submenu index="4">
+              <template slot="title"><i class="el-icon-menu"></i>标签管理</template>
+              <el-menu-item-group>
+                <el-menu-item :route="{name:'TL'}" index="4-1">标签列表</el-menu-item>
+                <el-menu-item :route="{name:'TE'}" index="4-2">标签编辑</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
           </el-menu>
       </el-col>
       <el-col :span="20">

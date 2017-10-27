@@ -1,5 +1,5 @@
 <template>
-  <div class="type-list">
+  <div class="tag-list">
     <el-row>
       <el-col :span="22" :offset="1">
         <el-table
@@ -13,25 +13,12 @@
             width="80">
           </el-table-column>
           <el-table-column
-            prop="title"
-            label="标题"
-            width="180">
+            prop="name"
+            label="标签名">
           </el-table-column>
           <el-table-column
-            prop="user_id.username"
-            label="楼主">
-          </el-table-column>
-          <el-table-column
-            prop="tag_id.name"
-            label="标签">
-          </el-table-column>
-          <el-table-column
-            prop="readNumber"
-            label="阅读量">
-          </el-table-column>
-          <el-table-column
-            prop="replyNumber"
-            label="评论量">
+            prop="connect"
+            label="介绍">
           </el-table-column>
           <el-table-column
             prop="createTime"
@@ -67,7 +54,7 @@
   </div>
 </template>
 <script>
-import { getArtData, postDel } from './../../serveice/article'
+import { getTagData, postDel } from './../../serveice/tag'
 import M from 'moment'
 export default {
   data() {
@@ -79,7 +66,7 @@ export default {
   methods: {
     editHandle(item) {
       this.$router.push({
-        name: 'AE',
+        name: 'TE',
         query: {
           id: item._id
         }
@@ -104,7 +91,7 @@ export default {
                 //  在watch中监听$route的变化
                 //    触发重新获取数据的方法
                 this.$router.push({
-                  name: 'AL',
+                  name: 'TL',
                   query: {
                     r: Math.random(),
                   }
@@ -125,8 +112,8 @@ export default {
         });
     },
     getDataByPage(page=1) { // 从服务端获取数据
-      getArtData(page).then(res=>{
-        // console.log(res.data.data.list)
+      getTagData(page).then(res=>{
+        // console.log(res.data)
         this.tableData = res.data.data.list
         this.pageCount = res.data.data.pageCount
       })

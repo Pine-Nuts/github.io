@@ -8,6 +8,8 @@ import AL from "@/components/Article/ArticlesList"
 import AE from "@/components/Article/ArticlesEditor"
 import RL from "@/components/Reply/ReplysList"
 import RE from "@/components/Reply/ReplysEditor"
+import TL from "@/components/Tag/TagsList"
+import TE from "@/components/Tag/TagsEditor"
 import store from "./../store"
 import { isLogined } from "./../utils/tools";
 Vue.use(Router)
@@ -50,6 +52,14 @@ const router =  new Router({
           path: 'reply_editor',
           name: 'RE',
           component: RE
+        },{
+          path: 'tag_list',
+          name: 'TL',
+          component: TL
+        },{
+          path: 'tag_editor',
+          name: 'TE',
+          component: TE
         },
       ]
     }
@@ -82,7 +92,7 @@ router.afterEach((to,from)=>{
   if(to.name == 'UE'){
     store.commit('app/changeNav','1-2')
   }
-  if(to.name == 'Al'){
+  if(to.name == 'AL'){
     store.commit('app/changeNav','2-1')
   }
   if(to.name == 'AE'){
@@ -93,6 +103,12 @@ router.afterEach((to,from)=>{
   }
   if(to.name == 'RE'){
     store.commit('app/changeNav','3-2')
+  }
+  if(to.name == 'TL'){
+    store.commit('app/changeNav','4-1')
+  }
+  if(to.name == 'TE'){
+    store.commit('app/changeNav','4-2')
   }
 })
 export default router

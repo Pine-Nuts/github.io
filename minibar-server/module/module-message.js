@@ -12,15 +12,19 @@ const msgSchema = new Schema({
 		type: String,
 		default: ''
 	},
+	tag_id: {
+		type: Schema.Types.ObjectId,
+		ref: 'tag'
+	},
 	user_id: {
 		type: Schema.Types.ObjectId,
 		ref: 'user'
 	},
-	creatTime: {
+	createTime:{
 		type: Date,
 		default: Date.now
 	},
-	updateTime: {
+	updateTime:{
 		type: Date,
 		default: Date.now
 	},

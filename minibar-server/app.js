@@ -51,7 +51,6 @@ AdminUser.count({username: 'admin'})
 				username : 'admin',
 				password : 'admin',
 				description : '管理员',
-				isEncryption : 0
 			})
 			admin.save()
 				.then(date => {
@@ -122,6 +121,7 @@ app.post('/api/v1/admin/login',(req,res) => {
 app.use('/api/v3/common',require('./routes/api/v3/common'));
 app.use('/api/v1/admin/member',require('./routes/api/v1/member'));
 app.use('/api/v1/admin/article',require('./routes/api/v1/article'));
+app.use('/api/v1/admin/tag',require('./routes/api/v1/tag'));
 app.use('/api/v2/user/article',require('./routes/api/v2/article'));
 
 // catch 404 and forward to error handler

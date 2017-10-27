@@ -28,6 +28,12 @@
             :formatter="dalDate">
           </el-table-column>
           <el-table-column
+            prop="updateTime"
+            label="更新时间"
+            width="180"
+            :formatter="dalDate">
+          </el-table-column>
+          <el-table-column
             label="操作"
             width="180">
             <template scope="scope">

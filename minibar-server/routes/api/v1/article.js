@@ -12,7 +12,7 @@ router.get('/',(req,res) => {
 	var queryCount = Article.count()
 	var queryData = Article.find({})
 		.sort({_id: -1})
-		.populate('user_id')
+		.populate('user_id tag_id')
 		.limit(global.pageSize)
 		.skip((page-1)*global.pageSize);
 	const pAll = Promise.all([queryCount,queryData])
@@ -49,8 +49,7 @@ router.get('/one',(req,res) => {
 
 // 创建帖子
 router.post('/create',(req,res) => {
-	var model = new Article(req.body)
-		model.save()
+	new Article(req.body).save()
 			.then(data=>{
 				console.log(data);
 				// res.send('保存成功')
@@ -66,6 +65,27 @@ router.post('/create',(req,res) => {
 					msg:'创建数据失败'
 				})
 			})
+})
+
+// 更新帖子
+router.post('/update/:id',(req,res) => {
+	req.body.updateTime = new Date()
+	Article.findByIdAndUpdate(req.params.id,req.body)
+	.then(data=>{
+		console.log(data);
+		// res.send('保存成功')
+		res.json({
+			status:'y',
+			msg:'更新数据成功'
+		})
+	})
+	.catch(err=>{
+		console.log(err)
+		res.json({
+			status:'n',
+			msg:'更新数据失败'
+		})
+	})
 })
 
 // 删除帖子

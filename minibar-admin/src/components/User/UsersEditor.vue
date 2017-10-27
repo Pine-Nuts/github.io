@@ -57,7 +57,7 @@ export default {
       editor: {}, // 富文本编辑器
       userForm: {
         username: "",
-        userphoto: "",
+        userphoto: "/images/user.png",
         password: "",
         description: "",
         isMale: "",

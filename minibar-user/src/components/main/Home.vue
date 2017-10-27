@@ -4,14 +4,16 @@
       <el-col>
         <el-collapse v-for="item in msgData" :key="item._id">
           <el-row>
-            <el-col :span="4"><el-button :plain="true" :disabled="true">{{item.readNumber}}</el-button></el-col>
-            <el-col :span="16" class="connect">
-              <el-row>{{item.title}}</el-row>
-              <el-row>{{item.connect}}</el-row>
-            </el-col>
-            <el-col :span="4">
-              <el-row>{{item.user_id.username}}</el-row>
-              <el-row>{{item.updateTime}}</el-row>
+            <el-col :span="2"><el-button :plain="true" :disabled="true">{{item.readNumber}}</el-button></el-col>
+            <el-col :span="22">
+              <el-col :span="18" class="connect">
+                <el-row @click.native="toDetail(item._id)">{{item.title}}</el-row>
+                <el-row>{{item.connect}}</el-row>
+              </el-col>
+              <el-col :span="6" style="text-align: left;">
+                <el-row>{{item.user_id.username}}</el-row>
+                <el-row :formatter="dalDate">{{item.updateTime}}</el-row>
+              </el-col>
             </el-col>
           </el-row>
         </el-collapse>
@@ -27,13 +29,14 @@
 
 <script>
 import M from 'moment';
-import { getArtData } from "./../serveice/article";
+import { getArtData } from "./../../serveice/article";
 
 export default {
   name: "Home",
   data() {
     return {
-      msgData: []
+      msgData: [],
+      pageCount: 1,
     };
   },
   methods: {
@@ -45,9 +48,18 @@ export default {
         this.pageCount = res.data.data.pageCount;
       });
     },
-     dalDate(row, column, cellValue) {
+    toDetail(cb) {
+      // console.log(cb)
+      this.$router.push({ name: 'detail' });
+      this.$router.push({query:{id: cb}});
+    },
+    dalDate(row, column, cellValue) {
+       console.log(cellValue)
       return M(cellValue).format('YYYY-MM-DD HH:mm:ss')
     },
+    pageChanged(page){ // 页码选择改变
+      this.getDataByPage(page)
+    }
   },
   created() {
     this.getDataByPage();
