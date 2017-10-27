@@ -123,8 +123,9 @@ app.use('/api/v1/admin/member',require('./routes/api/v1/member'));
 app.use('/api/v1/admin/article',require('./routes/api/v1/article'));
 app.use('/api/v1/admin/tag',require('./routes/api/v1/tag'));
 app.use('/api/v2/user/member',require('./routes/api/v2/member'));
+app.use('/api/v2/user/tag',require('./routes/api/v2/tag'));
 app.use('/api/v2/user/article',require('./routes/api/v2/article'));
-
+app.use('/api/v2/user/reply',require('./routes/api/v2/reply'));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

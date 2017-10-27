@@ -6,9 +6,11 @@
           <el-col :span="18">
             <el-menu :default-active="navVal" :router="true">
               <el-menu-item index="1" :route="{name: 'home'}">看帖</el-menu-item>
-              <el-menu-item index="2" :route="{name: 'notice'}">公告</el-menu-item>
-              <el-menu-item index="3" :route="{name: 'appeal'}">求助</el-menu-item>
-              <el-menu-item index="4" :route="{name: 'fun'}">划水</el-menu-item>
+              <el-menu-item
+              v-for="(item, index) in tags"
+              :key="item._id"
+              :index="index+1"
+              >{{item.name}}</el-menu-item>
             </el-menu>
           </el-col>
           <el-col :span="6">
@@ -69,6 +71,7 @@ import E from "wangeditor";
 import Cookies from "js-cookie";
 import { postCreate } from "./../serveice/article";
 import { getById } from "./../serveice/member";
+import { getTagData } from "./../serveice/tag";
 import { server } from "./../utils/config";
 
 export default {
@@ -78,6 +81,7 @@ export default {
       input: '',
       id: '',
       serverUrl: server,
+      tags:[],
       userMsg: {
         username: "",
         userphoto: "",
@@ -150,6 +154,10 @@ export default {
       getById(this.id).then(res => {
         this.userMsg = res.data.data
       })
+    getTagData().then(res => {
+      console.log(res.data.data)
+      this.tags = res.data.data
+    })
   },
   mounted() {
     // 创建富文本编辑器

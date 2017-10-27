@@ -49,7 +49,6 @@ export default {
       });
     },
     toDetail(cb) {
-      // console.log(cb)
       this.$router.push({ name: 'detail' });
       this.$router.push({query:{id: cb}});
     },

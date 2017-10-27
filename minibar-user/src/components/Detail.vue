@@ -2,6 +2,10 @@
   <div class="detail">
     <el-row>
       <el-col>
+        <el-collapse v-if="isFirst">
+          <el-row>
+          </el-row>
+        </el-collapse>
         <el-collapse v-for="item in repData" :key="item._id">
           <el-row>
           </el-row>
@@ -35,14 +39,19 @@
 
 <script>
 import E from "wangeditor";
+import { getById } from "./../serveice/article";
 import { getRepData } from "./../serveice/reply";
 
 export default {
   name: 'Detail',
   data () {
     return {
+      isFirst: true,
       editor: {}, // 富文本编辑器
       id: '',
+      msgDate:{
+
+      },
       repForm: {
         title: "",
         connect: "",
@@ -56,6 +65,11 @@ export default {
     }
   },
   methods: {
+    getDataById(){
+      getById(this.id).then(res => {
+        this.msgDate = res.data.data
+      })
+    },
     getDataByPage(page,id) {
       // 从服务端获取数据
       getRepData(page,id).then(res => {
@@ -93,6 +107,7 @@ export default {
       });
     },
     pageChanged(page,id){ // 页码选择改变
+      this.isFirst = false;
       this.getDataByPage(page,id)
     }
   },
@@ -107,6 +122,9 @@ export default {
   create() {
     if (this.$route.query.id) {
       this.id = this.$route.query.id;
+    }
+    if(this.isFirst){
+      this.getDataById()
     }
     this.getDataByPage(page = 1,this.id);
   }

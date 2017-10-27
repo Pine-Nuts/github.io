@@ -1,20 +1,83 @@
 <template>
-  <div class="apeal">
-    <h1>我是求助</h1>
+  <div class="Appeal">
+    <el-row>
+      <el-col>
+        <el-collapse v-for="item in msgData" :key="item._id">
+          <el-row>
+            <el-col :span="2"><el-button :plain="true" :disabled="true">{{item.readNumber}}</el-button></el-col>
+            <el-col :span="22">
+              <el-col :span="18" class="connect">
+                <el-row @click.native="toDetail(item._id)">{{item.title}}</el-row>
+                <el-row v-html="item.connect"></el-row>
+              </el-col>
+              <el-col :span="6" style="text-align: left;">
+                <el-row>{{item.user_id.username}}</el-row>
+                <el-row :formatter="dalDate">{{item.updateTime}}</el-row>
+              </el-col>
+            </el-col>
+          </el-row>
+        </el-collapse>
+        <el-pagination
+          layout="prev, pager, next"
+          :page-count="pageCount"
+          @current-change="pageChanged">
+        </el-pagination>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'Appeal',
-  data () {
-    return {
+import M from 'moment';
+import { getByTag } from "./../../serveice/article";
 
+export default {
+  name: "Appeal",
+  data() {
+    return {
+      tag_id: '',
+      msgData: [],
+      pageCount: 1,
+    };
+  },
+  methods: {
+    getDataByPage(page = 1) {
+      // 从服务端获取数据
+      getByTag(this.tag_id,page).then(res => {
+        // console.log(res.data.data.list)
+        this.msgData = res.data.data.list;
+        this.pageCount = res.data.data.pageCount;
+      });
+    },
+    toDetail(cb) {
+      this.$router.push({ name: 'detail' });
+      this.$router.push({query:{id: cb}});
+    },
+    dalDate() {
+       console.log(this)
+      return M(cellValue).format('YYYY-MM-DD HH:mm:ss')
+    },
+    pageChanged(page){ // 页码选择改变
+      this.getDataByPage(page)
     }
+  },
+  created() {
+    if (this.$route.query.tag_id) {
+      this.tag_id = this.$route.query.tag_id;
+    }
+    this.getDataByPage();
   }
-}
+};
 </script>
 
 <style scoped>
-
+.el-collapse{
+  padding: 0;
+  margin: 0;
+}
+.connect{
+  text-align: left;
+  overflow: hidden;
+}
 </style>
+

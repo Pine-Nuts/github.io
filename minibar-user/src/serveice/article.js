@@ -21,3 +21,27 @@ export function getArtData(page){
 export function postCreate(data) {
   return post('/api/v2/user/article/create',data)
 }
+
+/**
+ * 根据id获取单条记录
+ * @param {string} id 查询的id
+ * @returns Promise
+ */
+export function getById(id) {
+  return get('/api/v2/user/article/one',{
+    params: { id }
+  })
+}
+
+/**
+ * get根据标签获取文章列表请求
+ *
+ * @export
+ * @param {any} page
+ * @returns
+ */
+export function getByTag(tag_id,page){
+  return get(`/api/v2/user/article/${tag_id}`,{
+    params: { page }
+  })
+}
