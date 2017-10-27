@@ -25,10 +25,10 @@
         </el-col>
         <el-col :span="6">
           <el-col>
-            <el-card :body-style="{ padding: '0px' }">
-              <img src="./../image/user.png" class="image">
+            <el-card :body-style="{ padding: '0px' }" v-model="userMsg">
+              <img :src="serverUrl+userMsg.userphoto" class="image">
               <div style="padding: 14px;">
-                <span>user</span>
+                <span>{{userMsg.username}}</span>
                 <div class="bottom clearfix">
                   <el-button type="text" class="button">操作按钮</el-button>
                 </div>
@@ -66,13 +66,24 @@
 <script>
 import { mapState } from "vuex";
 import E from "wangeditor";
+import Cookies from "js-cookie";
 import { postCreate } from "./../serveice/article";
+import { getById } from "./../serveice/member";
+import { server } from "./../utils/config";
+
 export default {
   data() {
     return {
       editor: {}, // 富文本编辑器
       input: '',
+      id: '',
+      serverUrl: server,
+      userMsg: {
+        username: "",
+        userphoto: "",
+      },
       msgForm: {
+        user_id: "",
         title: "",
         connect: "",
       },
@@ -92,19 +103,23 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.msgForm.user_id = this.id,
           postCreate(this.msgForm).then(res => {
             if (res.data.status == "y") {
               // 成功之后处理
               this.$message({
-                message: res.data.msg,
+                message: "发帖成功",
                 type: "success"
               });
               this.$router.push({
-                name: "Main"
+                name: "home",
+                query: {
+                    r: Math.random(),
+                  }
               });
             } else {
               this.$message({
-                message: res.data.msg,
+                message: "发帖失败",
                 type: "error"
               });
             }
@@ -118,6 +133,15 @@ export default {
         }
       });
     },
+    handleIconClick(){
+      console.log(123)
+    }
+  },
+  created() {
+    this.id = Cookies.get('userId')
+      getById(this.id).then(res => {
+        this.userMsg = res.data.data
+      })
   },
   mounted() {
     // 创建富文本编辑器

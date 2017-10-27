@@ -8,7 +8,7 @@
             <el-col :span="22">
               <el-col :span="18" class="connect">
                 <el-row @click.native="toDetail(item._id)">{{item.title}}</el-row>
-                <el-row>{{item.connect}}</el-row>
+                <el-row v-html="item.connect"></el-row>
               </el-col>
               <el-col :span="6" style="text-align: left;">
                 <el-row>{{item.user_id.username}}</el-row>

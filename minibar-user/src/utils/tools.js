@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 export function isLogined(){
-  if(Cookies.get('username')){
+  if(Cookies.get('userId')){
     return true
   }
   else{
@@ -8,6 +8,6 @@ export function isLogined(){
   }
 }
 
-export function setLogined(username){
-  Cookies.set('username',username)
+export function setLogined(id){
+  Cookies.set('userId',id)
 }
