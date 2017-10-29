@@ -1,20 +1,52 @@
 <template>
   <div class="detail">
     <el-row>
+      <el-col :span="24" class="type_nav">
+        <el-menu class="el-menu-demo" mode="horizontal">
+          <el-col :span="18">
+            <el-menu :default-active="navVal" :router="true">
+              <el-menu-item>标题</el-menu-item>
+            </el-menu>
+          </el-col>
+          <el-col :span="6">
+            <el-menu-item class="search">
+              <el-input placeholder="吧内搜索" icon="search" v-model="input" :on-icon-click="handleIconClick">
+              </el-input>
+            </el-menu-item>
+          </el-col>
+        </el-menu>
+      </el-col>
+      <el-col :span="24">
+        <el-col :span="18">
+          <el-collapse v-if="isFirst">
+            <el-row>
+            </el-row>
+          </el-collapse>
+          <el-collapse v-for="item in repData" :key="item._id">
+            <el-row>
+            </el-row>
+          </el-collapse>
+          <el-pagination
+            layout="prev, pager, next"
+            :page-count="pageCount"
+            @current-change="pageChanged">
+          </el-pagination>
+        </el-col>
+        <el-col :span="6">
+          <el-col>
+            <el-card :body-style="{ padding: '0px' }" v-model="userMsg">
+              <img :src="serverUrl+userMsg.userphoto" class="image">
+              <div style="padding: 14px;">
+                <span>{{userMsg.username}}</span>
+                <div class="bottom clearfix">
+                  <el-button type="text" class="button" @click="userHandle">操作按钮</el-button>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-col>
+      </el-col>
       <el-col>
-        <el-collapse v-if="isFirst">
-          <el-row>
-          </el-row>
-        </el-collapse>
-        <el-collapse v-for="item in repData" :key="item._id">
-          <el-row>
-          </el-row>
-        </el-collapse>
-        <el-pagination
-          layout="prev, pager, next"
-          :page-count="pageCount"
-          @current-change="pageChanged">
-        </el-pagination>
         <el-menu class="el-menu-demo" mode="horizontal">
           <el-col :span="24">
             <h3 style="text-align: left;"><i class="el-icon-document"></i>发表回复</h3>
@@ -39,6 +71,8 @@
 
 <script>
 import E from "wangeditor";
+import Cookies from "js-cookie";
+import { server } from "./../utils/config";
 import { getById } from "./../serveice/article";
 import { getRepData } from "./../serveice/reply";
 
@@ -48,7 +82,13 @@ export default {
     return {
       isFirst: true,
       editor: {}, // 富文本编辑器
+      userId: '',
       id: '',
+      serverUrl: server,
+      userMsg: {
+        username: "",
+        userphoto: "",
+      },
       msgDate:{
 
       },
@@ -76,6 +116,14 @@ export default {
         this.repData = res.data.data.list;
         this.pageCount = res.data.data.pageCount;
       });
+    },
+    userHandle(){
+      this.$router.push({
+        name: "me",
+        query: {
+           id: this.id,
+        }
+      })
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -120,6 +168,10 @@ export default {
     this.editor.create();
   },
   create() {
+    this.userId = Cookies.get('userId')
+    getById(this.userId).then(res => {
+      this.userMsg = res.data.data
+    })
     if (this.$route.query.id) {
       this.id = this.$route.query.id;
     }

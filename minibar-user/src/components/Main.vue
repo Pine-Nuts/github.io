@@ -160,9 +160,9 @@ export default {
   },
   created() {
     this.id = Cookies.get('userId')
-      getById(this.id).then(res => {
-        this.userMsg = res.data.data
-      })
+    getById(this.id).then(res => {
+      this.userMsg = res.data.data
+    })
     getTagData().then(res => {
       this.tags = res.data.data
     })
