@@ -9,7 +9,8 @@
               <el-menu-item
               v-for="(item, index) in tags"
               :key="item._id"
-              :index="index+1"
+              :index="String(index+2)"
+              @click="tagArt(item._id)"
               >{{item.name}}</el-menu-item>
             </el-menu>
           </el-col>
@@ -80,6 +81,7 @@ export default {
       editor: {}, // 富文本编辑器
       input: '',
       id: '',
+      tagID: '',
       serverUrl: server,
       tags:[],
       userMsg: {
@@ -145,6 +147,15 @@ export default {
         }
       })
     },
+    tagArt(cb){
+      this.tagID = cb
+      this.$router.push({
+        name: "connect",
+        query: {
+           tag_id: cb,
+        }
+      })
+    },
     handleIconClick(){
       console.log(123)
     }
@@ -155,7 +166,6 @@ export default {
         this.userMsg = res.data.data
       })
     getTagData().then(res => {
-      console.log(res.data.data)
       this.tags = res.data.data
     })
   },
@@ -166,6 +176,14 @@ export default {
       this.msgForm.connect = html;
     };
     this.editor.create();
+  },
+  watch: {
+    // 监听路由信息的改变,重新加载数据
+    // 从而引起路由信息的改变
+    '$route':function(){
+      // console.log('111111')
+      // this.getDataByPage()
+    }
   },
   computed: {
     ...mapState('app',['navVal'])

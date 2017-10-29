@@ -1,5 +1,5 @@
 <template>
-  <div class="Appeal">
+  <div class="Connect">
     <el-row>
       <el-col>
         <el-collapse v-for="item in msgData" :key="item._id">
@@ -32,7 +32,7 @@ import M from 'moment';
 import { getByTag } from "./../../serveice/article";
 
 export default {
-  name: "Appeal",
+  name: "Connect",
   data() {
     return {
       tag_id: '',
@@ -54,7 +54,6 @@ export default {
       this.$router.push({query:{id: cb}});
     },
     dalDate() {
-       console.log(this)
       return M(cellValue).format('YYYY-MM-DD HH:mm:ss')
     },
     pageChanged(page){ // 页码选择改变
@@ -65,8 +64,9 @@ export default {
     if (this.$route.query.tag_id) {
       this.tag_id = this.$route.query.tag_id;
     }
+    console.log(this.$route)
     this.getDataByPage();
-  }
+  },
 };
 </script>
 

@@ -7,9 +7,7 @@ import Login from "@/components/load/Login";
 import Me from "@/components/Me";
 import Detail from '@/components/Detail';
 import Home from '@/components/main/Home';
-import Notice from '@/components/main/Notice';
-import Appeal from '@/components/main/Appeal';
-import Fun from '@/components/main/Fun';
+import Connect from '@/components/main/Connect';
 import store from "./../store"
 import { isLogined } from "./../utils/tools";
 
@@ -47,17 +45,9 @@ const router = new Router({
           name: 'home',
           component: Home
         },{
-          path: 'notice',
-          name: 'notice',
-          component: Notice
-        },{
-          path: 'appeal',
-          name: 'appeal',
-          component: Appeal
-        },{
-          path: 'fun',
-          name: 'fun',
-          component: Fun
+          path: 'connect',
+          name: 'connect',
+          component: Connect
         }
       ]
     },{

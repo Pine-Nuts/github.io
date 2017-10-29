@@ -8,6 +8,10 @@ const tagSchema = new Schema({
 		type: String,
 		default: ''
 	},
+	Enname: {
+		type: String,
+		default: ''
+	},
 	connect: {
 		type: String,
 		default: ''

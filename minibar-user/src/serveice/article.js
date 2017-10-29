@@ -41,7 +41,10 @@ export function getById(id) {
  * @returns
  */
 export function getByTag(tag_id,page){
-  return get(`/api/v2/user/article/${tag_id}`,{
-    params: { page }
+  return get('/api/v2/user/article',{
+    params: {
+      page: page,
+      id: tag_id
+    }
   })
 }

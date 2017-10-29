@@ -6,6 +6,9 @@
           <el-form-item label="名称" prop="name">
             <el-input v-model="tagForm.name"></el-input>
           </el-form-item>
+          <el-form-item label="名称(英)" prop="Enname">
+            <el-input v-model="tagForm.Enname"></el-input>
+          </el-form-item>
           <el-form-item label="介绍" prop="connect">
             <el-input v-model="tagForm.connect"></el-input>
           </el-form-item>
@@ -28,12 +31,16 @@ export default {
       id: "", // 当前记录的id值,默认为空表示是新增操作
       tagForm: {
         name: "",
+        Enname: "",
         connect: "",
       },
       rules: {
         name: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { required: true, message: '请输入名称', trigger: 'blur' },
           { min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur' }
+        ],
+        Enname: [
+          { required: true, message: '请输入名称英文', trigger: 'blur' },
         ],
         connect: [
           { required: true, message: '请输入密码', trigger: 'blur' },
