@@ -64,8 +64,20 @@ export default {
     if (this.$route.query.tag_id) {
       this.tag_id = this.$route.query.tag_id;
     }
-    console.log(this.$route)
     this.getDataByPage();
+  },
+  watch: {
+    // 监听路由信息的改变,重新加载数据
+    // 从而引起路由信息的改变
+    '$route':function(){
+      // console.log('111111')
+      // this.getDataByPage()
+      // console.log(this.$route.query.tag_id)
+        if (this.$route.query.tag_id) {
+          this.tag_id = this.$route.query.tag_id;
+        }
+        this.getDataByPage();
+      }
   },
 };
 </script>

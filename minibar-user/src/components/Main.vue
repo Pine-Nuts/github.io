@@ -81,7 +81,6 @@ export default {
       editor: {}, // 富文本编辑器
       input: '',
       id: '',
-      tagID: '',
       serverUrl: server,
       tags:[],
       userMsg: {
@@ -148,7 +147,6 @@ export default {
       })
     },
     tagArt(cb){
-      this.tagID = cb
       this.$router.push({
         name: "connect",
         query: {
@@ -176,14 +174,6 @@ export default {
       this.msgForm.connect = html;
     };
     this.editor.create();
-  },
-  watch: {
-    // 监听路由信息的改变,重新加载数据
-    // 从而引起路由信息的改变
-    '$route':function(){
-      // console.log('111111')
-      // this.getDataByPage()
-    }
   },
   computed: {
     ...mapState('app',['navVal'])
