@@ -59,24 +59,22 @@ router.get('/one',(req,res) => {
 	if(req.query.id){
 		query._id = req.query.id
 	}
-	let number
 	Article.findById(query)
 	.then(data=>{
 		data.readNumber += 1;
-		number = data.readNumber
 		res.json({
 			status:'y',
 			msg:'获取数据成功',
 			data
 		});
-	})
-	Article.findByIdAndUpdate(req.query.id,{$push:{readNumber:number}})
+		Article.findByIdAndUpdate(req.query.id,data)
 		.then(data=>{
 			console.log('更新成功')
 		})
 		.catch(data=>{
 			console.log('更新失败')
 		})
+	})
 })
 
 module.exports = router;
