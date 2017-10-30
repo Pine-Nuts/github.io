@@ -4,33 +4,20 @@
       <el-col :span="24" class="type_nav">
         <el-menu class="el-menu-demo" mode="horizontal">
           <el-col :span="18">
-            <el-menu :default-active="navVal" :router="true">
-              <el-menu-item>标题</el-menu-item>
+            <el-menu>
+              <el-menu-item style="font-size: 20px;font-weight: bold">{{msgDate.title}}</el-menu-item>
             </el-menu>
           </el-col>
           <el-col :span="6">
-            <el-menu-item class="search">
-              <el-input placeholder="吧内搜索" icon="search" v-model="input" :on-icon-click="handleIconClick">
-              </el-input>
+            <el-menu-item>
+              <el-button type="text" icon="d-arrow-left" @click="backHandle">返回小吧</el-button>
             </el-menu-item>
           </el-col>
         </el-menu>
       </el-col>
       <el-col :span="24">
         <el-col :span="18">
-          <el-collapse v-if="isFirst">
-            <el-row>
-            </el-row>
-          </el-collapse>
-          <el-collapse v-for="item in repData" :key="item._id">
-            <el-row>
-            </el-row>
-          </el-collapse>
-          <el-pagination
-            layout="prev, pager, next"
-            :page-count="pageCount"
-            @current-change="pageChanged">
-          </el-pagination>
+          <router-view/>
         </el-col>
         <el-col :span="6">
           <el-col>
@@ -52,12 +39,12 @@
             <h3 style="text-align: left;"><i class="el-icon-document"></i>发表回复</h3>
           </el-col>
           <el-col :span="18">
-            <el-form :model="repForm" :rules="rules" ref="repForm" label-width="100px" class="demo-msgForm">
+            <el-form :model="repForm" :rules="rules" ref="repForm" label-width="100px" class="demo-repForm">
               <el-form-item label="内容" prop="connect">
                 <div id="editorElem" style="text-align:left"></div>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="submitForm('msgForm')" style="width: 100%">发表</el-button>
+                <el-button type="primary" @click="submitForm('repForm')" style="width: 100%">发表</el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -74,13 +61,13 @@ import E from "wangeditor";
 import Cookies from "js-cookie";
 import { server } from "./../utils/config";
 import { getById } from "./../serveice/article";
-import { getRepData } from "./../serveice/reply";
+import { getUserById } from "./../serveice/member";
+import { postCreate } from "./../serveice/reply";
 
 export default {
   name: 'Detail',
   data () {
     return {
-      isFirst: true,
       editor: {}, // 富文本编辑器
       userId: '',
       id: '',
@@ -90,11 +77,12 @@ export default {
         userphoto: "",
       },
       msgDate:{
-
+        title:""
       },
       repForm: {
-        title: "",
+        user_id: "",
         connect: "",
+        msg_id: "",
       },
       rules: {
         connect: [
@@ -105,18 +93,6 @@ export default {
     }
   },
   methods: {
-    getDataById(){
-      getById(this.id).then(res => {
-        this.msgDate = res.data.data
-      })
-    },
-    getDataByPage(page,id) {
-      // 从服务端获取数据
-      getRepData(page,id).then(res => {
-        this.repData = res.data.data.list;
-        this.pageCount = res.data.data.pageCount;
-      });
-    },
     userHandle(){
       this.$router.push({
         name: "me",
@@ -125,10 +101,17 @@ export default {
         }
       })
     },
+    backHandle() {
+      this.$router.push({
+        name: "home",
+      })
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          postCreate(this.msgForm).then(res => {
+          this.repForm.user_id = this.userId;
+          this.repForm.msg_id = this.id
+          postCreate(this.repForm).then(res => {
             if (res.data.status == "y") {
               // 成功之后处理
               this.$message({
@@ -136,7 +119,7 @@ export default {
                 type: "success"
               });
               this.$router.push({
-                name: "Main"
+                name: "MSG"
               });
             } else {
               this.$message({
@@ -154,10 +137,6 @@ export default {
         }
       });
     },
-    pageChanged(page,id){ // 页码选择改变
-      this.isFirst = false;
-      this.getDataByPage(page,id)
-    }
   },
   mounted() {
     // 创建富文本编辑器
@@ -167,22 +146,20 @@ export default {
     };
     this.editor.create();
   },
-  create() {
+  created() {
     this.userId = Cookies.get('userId')
-    getById(this.userId).then(res => {
+    getUserById(this.userId).then(res => {
       this.userMsg = res.data.data
     })
-    if (this.$route.query.id) {
-      this.id = this.$route.query.id;
+    if(this.$route.query.id){
+      this.id = this.$route.query.id
     }
-    if(this.isFirst){
-      this.getDataById()
-    }
-    this.getDataByPage(page = 1,this.id);
+    getById(this.id).then(res => {
+      this.msgDate = res.data.data
+    })
   }
 }
 </script>
 
 <style scoped>
-
 </style>

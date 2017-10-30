@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Article = require('./../../../module/module-message');
-const utils = require('./../../../tools/utils');
-
 // 帖子列表显示
 router.get('/',(req,res) => {
 	let page = 1; // 当前页面
@@ -34,7 +32,6 @@ router.get('/',(req,res) => {
 		})
 })
 
-
 // 创建帖子
 router.post('/create',(req,res) => {
 	var model = new Article(req.body)
@@ -56,5 +53,30 @@ router.post('/create',(req,res) => {
 			})
 })
 
+// 单个帖子
+router.get('/one',(req,res) => {
+	var query={}
+	if(req.query.id){
+		query._id = req.query.id
+	}
+	let number
+	Article.findById(query)
+	.then(data=>{
+		data.readNumber += 1;
+		number = data.readNumber
+		res.json({
+			status:'y',
+			msg:'获取数据成功',
+			data
+		});
+	})
+	Article.findByIdAndUpdate(req.query.id,{$push:{readNumber:number}})
+		.then(data=>{
+			console.log('更新成功')
+		})
+		.catch(data=>{
+			console.log('更新失败')
+		})
+})
 
 module.exports = router;

@@ -1,13 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from "@/components/Main";
+import Home from '@/components/main/Home';
+import Connect from '@/components/main/Connect';
 import Load from "@/components/Load";
 import Register from '@/components/load/Register';
 import Login from "@/components/load/Login";
 import Me from "@/components/Me";
 import Detail from '@/components/Detail';
-import Home from '@/components/main/Home';
-import Connect from '@/components/main/Connect';
+import MSG from "@/components/detail/Message";
 import store from "./../store"
 import { isLogined } from "./../utils/tools";
 
@@ -53,7 +54,14 @@ const router = new Router({
     },{
       path: '/detail',
       name: 'detail',
-      component: Detail
+      component: Detail,
+      children: [
+        {
+          path: '',
+          name: 'msg',
+          component: MSG
+        }
+      ]
     },{
       path: '/me',
       name: 'me',

@@ -45,7 +45,7 @@
 </template>
 <script>
 import E from "wangeditor";
-import { getById, postUpdate } from "./../serveice/member";
+import { getUserById, postUpdate } from "./../serveice/member";
 import { server } from "./../utils/config";
 export default {
   data() {
@@ -111,7 +111,7 @@ export default {
     },
     getDataById() {
       // 根据id获取数据
-      getById(this.id).then(res => {
+      getUserById(this.id).then(res => {
         this.userForm= res.data.data;
         this.editor.txt.html(this.userForm.description); // 设置富文本编辑器的默认内容
       });

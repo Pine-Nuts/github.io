@@ -26,7 +26,7 @@ export function postCreate(data) {
  * @param {string} id 查询的id
  * @returns Promise
  */
-export function getById(id) {
+export function getUserById(id) {
   return get('/api/v2/user/member/one',{
     params: { id }
   })

@@ -71,7 +71,7 @@ import { mapState } from "vuex";
 import E from "wangeditor";
 import Cookies from "js-cookie";
 import { postCreate } from "./../serveice/article";
-import { getById } from "./../serveice/member";
+import { getUserById } from "./../serveice/member";
 import { getTagData } from "./../serveice/tag";
 import { server } from "./../utils/config";
 
@@ -160,7 +160,7 @@ export default {
   },
   created() {
     this.id = Cookies.get('userId')
-    getById(this.id).then(res => {
+    getUserById(this.id).then(res => {
       this.userMsg = res.data.data
     })
     getTagData().then(res => {
