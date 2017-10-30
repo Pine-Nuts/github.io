@@ -1,5 +1,6 @@
 const express = require('express');
 const msgReply = require('./../../../module/module-msgReply');
+const Article = require('./../../../module/module-message');
 const router = express.Router();
 
 // 底部回复列表
@@ -39,11 +40,21 @@ router.post('/create',(req,res) => {
 	var model = new msgReply(req.body)
 		model.save()
 			.then(data=>{
-				console.log(data);
 				// res.send('保存成功')
 				res.json({
 					status:'y',
 					msg:'创建数据成功'
+				})
+				Article.findById(data.msg_id)
+				.then(arr=>{
+					arr.replyNumber += 1;
+					Article.findByIdAndUpdate(data.msg_id,arr)
+					.then(data=>{
+						console.log('更新成功')
+					})
+					.catch(data=>{
+						console.log('更新失败')
+					})
 				})
 			})
 			.catch(err=>{
