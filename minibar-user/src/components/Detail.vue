@@ -119,7 +119,7 @@ export default {
                 type: "success"
               });
               this.$router.push({
-                name: "MSG"
+                name: "msg"
               });
             } else {
               this.$message({

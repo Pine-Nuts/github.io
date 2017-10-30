@@ -35,6 +35,7 @@
 <script>
 import M from 'moment';
 import { getRepData } from "./../../serveice/reply";
+import { getById } from "./../../serveice/article";
 import { server } from "./../../utils/config";
 
 export default {
@@ -67,7 +68,6 @@ export default {
     if(this.$route.query.id){
       this.msgId = this.$route.query.id
     }
-    console.log(this.msgId)
     this.getDataByPage();
   }
 };

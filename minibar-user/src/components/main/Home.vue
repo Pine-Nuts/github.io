@@ -62,7 +62,14 @@ export default {
   },
   created() {
     this.getDataByPage();
-  }
+  },
+  watch: {
+    // 监听路由信息的改变,重新加载数据
+    // 从而引起路由信息的改变
+    '$route':function(){
+        this.getDataByPage();
+    }
+  },
 };
 </script>
 
