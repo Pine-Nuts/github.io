@@ -17,7 +17,7 @@
                 <el-row v-html="message.connect"></el-row>
               </el-row>
               <el-col>
-                <el-row :formatter="dalDate">{{message.createTime}}</el-row>
+                <el-row>{{message.createTime | dalDate}}</el-row>
               </el-col>
             </el-col>
           </el-row>
@@ -37,7 +37,7 @@
                 <el-row v-html="item.connect"></el-row>
               </el-row>
               <el-col>
-                <el-row :formatter="dalDate">{{item.createTime}}</el-row>
+                <el-row>{{item.createTime | dalDate}}</el-row>
               </el-col>
             </el-col>
           </el-row>
@@ -79,10 +79,6 @@ export default {
         this.pageCount = res.data.data.pageCount;
       });
     },
-    dalDate() {
-      console.log(this)
-      return M(cellValue).format('YYYY-MM-DD HH:mm:ss')
-    },
     pageChanged(page){ // 页码选择改变
       this.getDataByPage(page)
       this.isFirst = false
@@ -94,7 +90,18 @@ export default {
     }
     this.getDataByPage();
   },
-watch: {
+  filters: {
+    dalDate(val){
+      let time=new Date().getTime()-new Date(val).getTime()
+      if(time>86400000){
+        return val = M(val).format('MM-DD')
+      }
+      else{
+        return val = M(val).format('HH:mm')
+      }
+    }
+  },
+  watch: {
     '$route':function(){
       // console.log('111111')
       this.getDataByPage()

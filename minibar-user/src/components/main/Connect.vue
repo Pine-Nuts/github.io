@@ -12,7 +12,7 @@
               </el-col>
               <el-col :span="6" style="text-align: left;">
                 <el-row>{{item.user_id.username}}</el-row>
-                <el-row :formatter="dalDate">{{item.updateTime}}</el-row>
+                <el-row>{{item.updateTime | dalDate}}</el-row>
               </el-col>
             </el-col>
           </el-row>
@@ -53,11 +53,19 @@ export default {
       this.$router.push({ name: 'detail' });
       this.$router.push({query:{id: cb}});
     },
-    dalDate() {
-      return M(cellValue).format('YYYY-MM-DD HH:mm:ss')
-    },
     pageChanged(page){ // 页码选择改变
       this.getDataByPage(page)
+    }
+  },
+  filters: {
+    dalDate(val){
+      let time=new Date().getTime()-new Date(val).getTime()
+      if(time>86400000){
+        return val = M(val).format('MM-DD')
+      }
+      else{
+        return val = M(val).format('HH:mm')
+      }
     }
   },
   created() {
