@@ -70,7 +70,7 @@ router.beforeEach((to,from,next)=>{
   if(to.meta.loginpage){
     if(isLogined()){
       next({
-        name: 'main'
+        name: 'UL'
       })
     } else {
       next()

@@ -24,6 +24,10 @@ const repReplySchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
+	updateTime:{
+		type: Date,
+		default: Date.now
+	},
 })
 const RepReply = mongoose.model('repReply',repReplySchema);
 
