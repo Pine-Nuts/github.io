@@ -2,6 +2,26 @@
   <div class="message">
     <el-row>
       <el-col>
+        <el-collapse v-if="this.isFirst">
+          <el-row>
+            <el-col :span="4">
+              <el-card :body-style="{ padding: '0px' }">
+                <img :src="serverUrl+message.user_id.userphoto" class="image">
+                <div style="padding: 14px;">
+                  <span>{{message.user_id.username}}</span>
+                </div>
+              </el-card>
+            </el-col>
+            <el-col :span="20">
+              <el-row>
+                <el-row v-html="message.connect"></el-row>
+              </el-row>
+              <el-col>
+                <el-row :formatter="dalDate">{{message.createTime}}</el-row>
+              </el-col>
+            </el-col>
+          </el-row>
+        </el-collapse>
         <el-collapse v-for="item in repData" :key="item._id">
           <el-row>
             <el-col :span="4">
@@ -12,11 +32,11 @@
                 </div>
               </el-card>
             </el-col>
-            <el-col :span="20" style="position: relative;">
+            <el-col :span="20">
               <el-row>
                 <el-row v-html="item.connect"></el-row>
               </el-row>
-              <el-col style="bottom: 0px;position: absolute">
+              <el-col>
                 <el-row :formatter="dalDate">{{item.createTime}}</el-row>
               </el-col>
             </el-col>
@@ -40,12 +60,14 @@ import { server } from "./../../utils/config";
 
 export default {
   name: "message",
+  props: ["message"],
   data() {
     return {
       serverUrl: server,
       repData: [],
       pageCount: 1,
       msgId:'',
+      isFirst: true,
     };
   },
   methods: {
@@ -58,10 +80,12 @@ export default {
       });
     },
     dalDate() {
+      console.log(this)
       return M(cellValue).format('YYYY-MM-DD HH:mm:ss')
     },
     pageChanged(page){ // 页码选择改变
       this.getDataByPage(page)
+      this.isFirst = false
     }
   },
   created() {
@@ -69,6 +93,12 @@ export default {
       this.msgId = this.$route.query.id
     }
     this.getDataByPage();
+  },
+watch: {
+    '$route':function(){
+      // console.log('111111')
+      this.getDataByPage()
+    }
   }
 };
 </script>

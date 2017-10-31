@@ -5,7 +5,7 @@
         <el-menu class="el-menu-demo" mode="horizontal">
           <el-col :span="18">
             <el-menu>
-              <el-menu-item style="font-size: 20px;font-weight: bold">{{msgDate.title}}</el-menu-item>
+              <el-menu-item style="font-size: 20px;font-weight: bold">{{msgData.title}}</el-menu-item>
             </el-menu>
           </el-col>
           <el-col :span="6">
@@ -17,7 +17,7 @@
       </el-col>
       <el-col :span="24">
         <el-col :span="18">
-          <router-view/>
+          <router-view :message="msgData" />
         </el-col>
         <el-col :span="6">
           <el-col>
@@ -63,7 +63,6 @@ import { server } from "./../utils/config";
 import { getById } from "./../serveice/article";
 import { getUserById } from "./../serveice/member";
 import { postCreate } from "./../serveice/reply";
-
 export default {
   name: 'Detail',
   data () {
@@ -76,8 +75,10 @@ export default {
         username: "",
         userphoto: "",
       },
-      msgDate:{
-        title:""
+      msgData:{
+        title:"",
+        connect: "",
+        user_id: ""
       },
       repForm: {
         user_id: "",
@@ -119,7 +120,11 @@ export default {
                 type: "success"
               });
               this.$router.push({
-                name: "msg"
+                name: "msg",
+                query:{
+                  id: this.id,
+                  r: Math.random(),
+                }
               });
             } else {
               this.$message({
@@ -137,6 +142,11 @@ export default {
         }
       });
     },
+    getData(){
+      getById(this.id).then(res => {
+      this.msgData = res.data.data
+    })
+    }
   },
   mounted() {
     // 创建富文本编辑器
@@ -154,9 +164,7 @@ export default {
     if(this.$route.query.id){
       this.id = this.$route.query.id
     }
-    getById(this.id).then(res => {
-      this.msgDate = res.data.data
-    })
+    this.getData()
   }
 }
 </script>

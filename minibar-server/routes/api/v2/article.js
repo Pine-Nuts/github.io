@@ -60,6 +60,7 @@ router.get('/one',(req,res) => {
 		query._id = req.query.id
 	}
 	Article.findById(query)
+	.populate('user_id')
 	.then(data=>{
 		data.readNumber += 1;
 		res.json({
