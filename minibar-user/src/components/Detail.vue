@@ -22,6 +22,9 @@
         <el-col :span="6">
           <el-col>
             <el-card :body-style="{ padding: '0px' }" v-model="userMsg">
+              <div class="top clearfix">
+                <el-button type="text" class="button" @click="clearHandle">退出</el-button>
+              </div>
               <img :src="serverUrl+userMsg.userphoto" class="image">
               <div style="padding: 14px;">
                 <span>{{userMsg.username}}</span>
@@ -63,6 +66,8 @@ import { server } from "./../utils/config";
 import { getById } from "./../serveice/article";
 import { getUserById } from "./../serveice/member";
 import { postCreate } from "./../serveice/reply";
+import { clearLogined } from "./../utils/tools";
+
 export default {
   name: 'Detail',
   data () {
@@ -100,6 +105,12 @@ export default {
         query: {
            id: this.id,
         }
+      })
+    },
+    clearHandle(){
+      clearLogined()
+      this.$router.push({
+        name: "login",
       })
     },
     backHandle() {

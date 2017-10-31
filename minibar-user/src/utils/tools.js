@@ -11,3 +11,6 @@ export function isLogined(){
 export function setLogined(id){
   Cookies.set('userId',id)
 }
+export function clearLogined(){
+  Cookies.remove('userId')
+}
