@@ -29,12 +29,15 @@
         <el-col :span="6">
           <el-col>
             <el-card :body-style="{ padding: '0px' }" v-model="userMsg">
-              <div class="top clearfix">
+              <div class="clearfix">
                 <el-button type="text" class="button" @click="clearHandle">退出</el-button>
               </div>
               <img :src="serverUrl+userMsg.userphoto" class="image">
               <div style="padding: 14px;">
                 <span>{{userMsg.username}}</span>
+                <div class="clearfix">
+                  <el-button type="text" class="button" @click="passHandle">修改密码</el-button>
+                </div>
                 <div class="bottom clearfix">
                   <el-button type="text" class="button" @click="userHandle">操作按钮</el-button>
                 </div>
@@ -144,6 +147,15 @@ export default {
         }
       });
     },
+    passHandle(){
+      this.$router.push({
+        name: "me",
+        query: {
+           id: this.id,
+           isPwd: true,
+        }
+      })
+    },
     userHandle(){
       this.$router.push({
         name: "me",
@@ -194,11 +206,6 @@ export default {
 </script>
 
 <style scoped>
-  .time {
-    font-size: 13px;
-    color: #999;
-  }
-
   .bottom {
     margin-top: 13px;
     line-height: 12px;

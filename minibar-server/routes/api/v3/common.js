@@ -17,8 +17,8 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 router.post('/file/uploadfile',upload.single('file'),function(req,res){
-    console.log(req)
-    console.log(req.file)
+    // console.log(req)
+    // console.log(req.file)
     ////返回 路径+文件名
     res.json({url:'/images/'+req.file.filename});
 })

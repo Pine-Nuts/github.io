@@ -59,6 +59,9 @@ router.post('/create',(req,res) => {
 
 // 更新用户
 router.post('/update/:id',(req,res) => {
+	if(req.body.password){
+		req.body.password = utils.md5(req.body.password)
+	}
 	Member.findByIdAndUpdate(req.params.id,req.body)
 	.then(data=>{
 		console.log(data);

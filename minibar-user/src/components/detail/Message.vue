@@ -115,5 +115,9 @@ export default {
   padding: 0;
   margin: 0;
 }
-
+.image {
+    padding: 5px;
+    width: 50%;
+    display: inline-block;
+  }
 </style>

@@ -3,38 +3,38 @@
     <el-row>
       <el-col :span="22" :offset="1">
         <el-form :model="userForm" :rules="rules" ref="userForm" label-width="100px" class="demo-userForm">
-          <el-form-item label="用户名" prop="username">
+          <el-form-item label="用户名" prop="username" v-if="!this.isPwd">
             <span>{{userForm.username}}</span>
           </el-form-item>
-          <el-form-item label="头像">
+          <el-form-item label="头像" v-if="!this.isPwd">
             <!--图片上传使用本地服务器 上传文件后显示的地址需要拼接一下服务地址-->
             <el-upload class="avatar-uploader" :action="serverUrl+'/api/v3/common/file/uploadfile'" :show-file-list="false" :on-success="handleAvatarScucess" :before-upload="beforeAvatarUpload">
               <img v-if="userForm.userphoto" :src="serverUrl+userForm.userphoto" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
-          <el-form-item label="原密码" prop="pwd">
+          <el-form-item v-if="this.isPwd" label="原密码" prop="pwd">
             <el-input type="password" v-model="userForm.pwd"></el-input>
           </el-form-item>
-          <el-form-item label="新密码" prop="password">
+          <el-form-item v-if="this.isPwd" label="新密码" prop="password">
             <el-input v-model="userForm.password" type="password"></el-input>
           </el-form-item>
-          <el-form-item label="年龄" prop="age">
+          <el-form-item label="年龄" prop="age" v-if="!this.isPwd">
             <el-input v-model="userForm.age"></el-input>
           </el-form-item>
-          <el-form-item label="性别" prop="isMale">
+          <el-form-item label="性别" prop="isMale" v-if="!this.isPwd">
             <el-radio-group v-model="userForm.isMale">
               <el-radio label="true">男</el-radio>
               <el-radio label="false">女</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="邮箱" prop="email">
+          <el-form-item label="邮箱" prop="email" v-if="!this.isPwd">
             <el-input v-model="userForm.email"></el-input>
           </el-form-item>
-          <el-form-item label="手机" prop="phone">
+          <el-form-item label="手机" prop="phone" v-if="!this.isPwd">
             <el-input v-model="userForm.phone"></el-input>
           </el-form-item>
-          <el-form-item label="介绍" prop="description">
+          <el-form-item label="介绍" prop="description" v-if="!this.isPwd">
             <div id="editorElem" style="text-align:left"></div>
           </el-form-item>
           <el-form-item>
@@ -69,6 +69,7 @@ export default {
         callback();
       };
     return {
+      isPwd: false,
       id: "", // 当前记录的id值
       editor: {}, // 富文本编辑器
       userForm: {
@@ -104,6 +105,18 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // 编辑
+          if(this.isPwd){
+            delete this.userForm.username;
+            delete this.userForm.userphoto;
+            delete this.userForm.description;
+            delete this.userForm.isMale;
+            delete this.userForm.age;
+            delete this.userForm.email;
+            delete this.userForm.phone;
+          }
+          else{
+            delete this.userForm.password;
+          }
           postUpdate(this.id, this.userForm).then(res => {
             if (res.data.status == "y") {
               // 成功之后处理
@@ -159,6 +172,9 @@ export default {
     }
   },
   created() {
+    if (this.$route.query.isPwd){
+      this.isPwd = true
+    }
     if (this.$route.query.id) {
       this.id = this.$route.query.id;
       this.getDataById();
