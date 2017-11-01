@@ -25,8 +25,27 @@
 <script>
 import { postCreate } from "./../../serveice/member";
 import { setLogined } from "./../../utils/tools";
+import { getValidateUser } from "./../../serveice/validate";
+
 export default {
   data() {
+    var validateUser = (rule, value, callback) => {
+      getValidateUser(value).then(res=>{
+        if(res.data.status== 'n'){
+          callback(new Error('用户名已存在'))
+        }
+        callback()
+      })
+    };
+    var validatePhone = (rule, value, callback) => {
+      if(! (value.length == 11) ){
+        callback(new Error('手机号必须11位'))
+      }
+      if(! (/^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value))){
+        callback(new Error('请输入正确的手机号格式'))
+      }
+      callback()
+    };
     return {
       id: "",
       registerForm: {
@@ -37,14 +56,16 @@ export default {
       rules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur' }
+          { min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur' },
+          { validator: validateUser, trigger: 'blur' }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: "请输入手机", trigger: "blur" },
+          { required: true, message: "请输入11位手机", trigger: "blur" },
+          { validator: validatePhone, trigger: 'blur' }
         ]
       }
     };

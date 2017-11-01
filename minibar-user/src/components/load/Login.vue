@@ -22,8 +22,17 @@
 <script>
 import { postLogin } from "./../../serveice/member";
 import { setLogined } from "./../../utils/tools";
+import { getValidateUser } from "./../../serveice/validate";
 export default {
   data() {
+    var validateUser = (rule, value, callback) => {
+      getValidateUser(value).then(res=>{
+        if(res.data.status== 'y'){
+          callback(new Error('用户名不存在'))
+        }
+        callback()
+      })
+    };
     return {
       id: "",
       loginForm: {
@@ -33,6 +42,7 @@ export default {
       rules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
+          { validator: validateUser, trigger: 'blur' }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },

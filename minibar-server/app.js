@@ -119,6 +119,7 @@ app.post('/api/v1/admin/login',(req,res) => {
 // 	)
 // })
 app.use('/api/v3/common',require('./routes/api/v3/common'));
+app.use('/api/v3/validate',require('./routes/api/v3/validate'));
 app.use('/api/v1/admin/member',require('./routes/api/v1/member'));
 app.use('/api/v1/admin/article',require('./routes/api/v1/article'));
 app.use('/api/v1/admin/reply',require('./routes/api/v1/reply'));

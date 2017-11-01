@@ -126,6 +126,8 @@ export default {
                     r: Math.random(),
                 }
               });
+            this.msgForm={}
+            this.editor.txt.html('<p><br></p>');
             } else {
               this.$message({
                 message: "发帖失败",

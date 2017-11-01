@@ -144,6 +144,8 @@ export default {
               });
             }
           });
+          this.repForm={}
+          this.editor.txt.html('<p><br></p>');
         } else {
           this.$message({
             message: "操作失败",
