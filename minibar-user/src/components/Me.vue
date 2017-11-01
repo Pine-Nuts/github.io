@@ -13,7 +13,10 @@
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
-          <el-form-item label="密码" prop="password">
+          <el-form-item label="原密码" prop="pwd">
+            <el-input type="password" v-model="userForm.pwd"></el-input>
+          </el-form-item>
+          <el-form-item label="新密码" prop="password">
             <el-input v-model="userForm.password" type="password"></el-input>
           </el-form-item>
           <el-form-item label="年龄" prop="age">
@@ -47,10 +50,26 @@
 import E from "wangeditor";
 import { getUserById, postUpdate } from "./../serveice/member";
 import { server } from "./../utils/config";
+import { getValidatePwd } from "./../serveice/validate";
+
 export default {
   data() {
+    var validatePwd = (rule, value, callback) => {
+      getValidatePwd(value,this.id).then(res=>{
+        if(res.data.status== 'n'){
+          callback(new Error('原密码输入错误'))
+        }
+        callback()
+      })
+    };
+    var validatePass = (rule, value, callback) => {
+        if (value == this.userForm.pwd) {
+          callback(new Error('两次输入密码不能一致!'));
+        }
+        callback();
+      };
     return {
-      id: "", // 当前记录的id值,默认为空表示是新增操作
+      id: "", // 当前记录的id值
       editor: {}, // 富文本编辑器
       userForm: {
         username: "",
@@ -68,9 +87,14 @@ export default {
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
         ],
+        pwd: [
+          { required: true, message: '请输入原密码', trigger: 'blur' },
+          { validator: validatePwd, trigger: 'blur' }
+        ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 100, message: '长度在 3 到 100 个字符', trigger: 'blur' }
+          { min: 3, max: 100, message: '长度在 3 到 100 个字符', trigger: 'blur' },
+          { validator: validatePass, trigger: 'blur' }
         ]
       }
     };
@@ -113,6 +137,7 @@ export default {
       // 根据id获取数据
       getUserById(this.id).then(res => {
         this.userForm= res.data.data;
+        this.userForm.password = ''
         this.editor.txt.html(this.userForm.description); // 设置富文本编辑器的默认内容
       });
     },

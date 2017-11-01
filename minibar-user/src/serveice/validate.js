@@ -11,3 +11,16 @@ export function getValidateUser(username){
     params: { username }
   })
 }
+
+/**
+ * 修改密码
+ *
+ * @export
+ * @param {any} page
+ * @returns
+ */
+export function getValidatePwd(password,id){
+  return get('/api/v3/validate/member_password',{
+    params: { password,id }
+  })
+}

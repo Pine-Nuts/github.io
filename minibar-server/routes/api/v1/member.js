@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Member = require('./../../../module/module-user');
+const Article = require('./../../../module/module-message');
+const Reply = require('./../../../module/module-msgReply');
 const utils = require('./../../../tools/utils');
 
 // 用户列表显示
@@ -89,8 +91,11 @@ router.post('/update/:id',(req,res) => {
 
 // 删除用户
 router.post('/del/:id',(req,res)=>{
-	Member.findByIdAndRemove(req.params.id)
-		.then(data=>{
+	var artrm =	Article.remove({user_id:req.params.id})
+	var reprm =	Reply.remove({user_id:req.params.id})
+	var memrm =	Member.findByIdAndRemove(req.params.id)
+	const pAll = Promise.all([artrm,reprm,memrm])
+		pAll.then(([artdt,repdt,memdt])=>{
 			res.json({
 				status:'y',
 				msg:'删除数据成功'

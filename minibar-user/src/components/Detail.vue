@@ -103,7 +103,7 @@ export default {
       this.$router.push({
         name: "me",
         query: {
-           id: this.id,
+           id: this.userId,
         }
       })
     },

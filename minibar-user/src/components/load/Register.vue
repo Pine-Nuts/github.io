@@ -14,7 +14,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="upload" @click="submitForm('registerForm')">确定</el-button>
-            <el-button type="primary" icon="setting" @click="resetForm('registerForm')">重置</el-button>
+            <el-button type="warning" icon="setting" @click="resetForm('registerForm')">重置</el-button>
           </el-form-item>
         </el-form>
       </el-col>

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Member = require('./../../../module/module-user');
+const utils = require('./../../../tools/utils');
+
 // 验证用户名是否存在
 router.get('/admin_user_name',(req,res)=>{
 	// console.log(req.query);
@@ -31,28 +33,46 @@ router.get('/member_username',(req,res)=>{
 		}
 	})
 })
-router.get('/member_email',(req,res)=>{
+router.get('/member_password',(req,res)=>{
 	// console.log(req.query);
-	Member.count({email:req.query.email})
-	.then(c=>{
-		if(c>0){
-			res.send(false)
+	let pwd = utils.md5(req.query.password);
+	Member.findById(req.query.id)
+	.then(data=>{
+		if(data.password == pwd){
+			res.json({
+				status: 'y'
+			})
 		}
 		else{
-			res.send(true);
+			res.json({
+				status: 'n'
+			})
 		}
 	})
 })
-router.get('/member_mobile',(req,res)=>{
-	// console.log(req.query);
-	Member.count({mobile:req.query.mobile})
-	.then(c=>{
-		if(c>0){
-			res.send(false)
-		}
-		else{
-			res.send(true);
-		}
-	})
-})
+
+// router.get('/member_email',(req,res)=>{
+// 	// console.log(req.query);
+// 	Member.count({email:req.query.email})
+// 	.then(c=>{
+// 		if(c>0){
+// 			res.send(false)
+// 		}
+// 		else{
+// 			res.send(true);
+// 		}
+// 	})
+// })
+// router.get('/member_mobile',(req,res)=>{
+// 	// console.log(req.query);
+// 	Member.count({mobile:req.query.mobile})
+// 	.then(c=>{
+// 		if(c>0){
+// 			res.send(false)
+// 		}
+// 		else{
+// 			res.send(true);
+// 		}
+// 	})
+// })
 module.exports = router;

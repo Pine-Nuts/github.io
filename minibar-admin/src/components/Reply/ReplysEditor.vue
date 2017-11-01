@@ -94,7 +94,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  name: "AL"
+                  name: "RL"
                 });
               } else {
                 this.$message({
@@ -113,7 +113,7 @@ export default {
                   type: "success"
                 });
                 this.$router.push({
-                  name: "AL"
+                  name: "RL"
                 });
               } else {
                 this.$message({

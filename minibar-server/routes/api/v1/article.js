@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Article = require('./../../../module/module-message');
+const Reply = require('./../../../module/module-msgReply');
 const utils = require('./../../../tools/utils');
 
 // 帖子列表显示
@@ -90,8 +91,10 @@ router.post('/update/:id',(req,res) => {
 
 // 删除帖子
 router.post('/del/:id',(req,res)=>{
-	Article.findByIdAndRemove(req.params.id)
-		.then(data=>{
+	var reprm = Reply.remove({msg_id:req.params.id})
+	var artrm = Article.findByIdAndRemove(req.params.id)
+	const pAll = Promise.all([artrm,reprm])
+		pAll.then(([artdt,repdt])=>{
 			res.json({
 				status:'y',
 				msg:'删除数据成功'
