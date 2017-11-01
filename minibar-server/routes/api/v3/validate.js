@@ -4,18 +4,18 @@ const Member = require('./../../../module/module-user');
 const utils = require('./../../../tools/utils');
 
 // 验证用户名是否存在
-router.get('/admin_user_name',(req,res)=>{
-	// console.log(req.query);
-	AdminUser.count({user_name:req.query.user_name})
-	.then(c=>{
-		if(c>0){
-			res.send(false)
-		}
-		else{
-			res.send(true);
-		}
-	})
-})
+// router.get('/admin_user_name',(req,res)=>{
+// 	// console.log(req.query);
+// 	AdminUser.count({user_name:req.query.user_name})
+// 	.then(c=>{
+// 		if(c>0){
+// 			res.send(false)
+// 		}
+// 		else{
+// 			res.send(true);
+// 		}
+// 	})
+// })
 // 验证用户名是否存在
 router.get('/member_username',(req,res)=>{
 	// console.log(req.query);
