@@ -213,4 +213,7 @@ export default {
   height: 178px;
   display: block;
 }
+.el-select-dropdown{
+  z-index: 9999999 !important;
+}
 </style>
